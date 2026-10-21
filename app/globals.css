@@ -654,9 +654,9 @@ button {
 }
 
 .cat-avatar--full {
-  width: min(86vw, 420px);
+  width: min(90vw, 440px);
   height: auto;
-  aspect-ratio: 926 / 1247;
+  aspect-ratio: 1133 / 1254;
   filter: drop-shadow(0 0 40px rgba(200, 245, 60, 0.22));
 }
 

@@ -30,9 +30,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/brand/catgpt-logo.png",
-        width: 1254,
-        height: 1254,
+        url: "/brand/catgpt-logo.jpg",
+        width: 1024,
+        height: 1024,
         alt: "CatGPT — a cat-man in yellow cat-eye sunglasses",
       },
     ],

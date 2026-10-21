@@ -1,7 +1,7 @@
 # CatGPT — Artificial Feline Intelligence
 
 <p align="center">
-  <img src="public/brand/catgpt-logo.png" alt="CatGPT logo: a cat-man in yellow cat-eye sunglasses and a studded collar" width="360" />
+  <img src="public/brand/catgpt-logo.jpg" alt="CatGPT logo: a cat-man in yellow cat-eye sunglasses and a studded collar" width="360" />
 </p>
 
 A wearable, party-ready AI cat with opinions. Guests type a question into the screen on your
