@@ -406,7 +406,7 @@ export function CatGptApp() {
         {showIntro ? (
           <div className="intro">
             <div className="intro-halo">
-              <CatAvatar size={320} mood="smug" />
+              <CatAvatar variant="full" mood="smug" />
             </div>
           </div>
         ) : (
