@@ -68,7 +68,7 @@ export async function POST(request: Request) {
   const question = normalizeQuestion(raw?.question);
   const mode = parseMode(raw?.mode);
   const avoid = sanitizeAvoid(raw?.avoid);
-  const mood = pickMood();
+  const mood = pickMood(mode);
 
   if (!isAnswerableQuestion(question)) {
     return json({ error: "Type an actual question. CatGPT can't read vibes." }, 400);

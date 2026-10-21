@@ -1,5 +1,5 @@
 import type { ChatMode } from "@/lib/types";
-import type { CatMood } from "@/lib/moods";
+import { pickMood, type CatMood } from "@/lib/moods";
 
 /**
  * The offline brain.
@@ -671,11 +671,12 @@ export interface OfflineReplyArgs {
 export function buildOfflineReply({
   question,
   mode,
-  mood = "frisky",
+  mood: explicitMood,
   avoid = [],
   rng = Math.random,
   maxChars = 220,
 }: OfflineReplyArgs): string {
+  const mood = explicitMood ?? pickMood(mode, rng);
   const clean = question.replace(/\s+/g, " ").trim();
   const avoidSet = new Set(avoid.map(normalizeForCompare));
 

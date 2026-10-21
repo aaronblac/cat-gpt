@@ -136,7 +136,7 @@ describe("offline brain", () => {
         buildOfflineReply({
           question: "Are you single?",
           mode: "ask",
-          mood: "frisky",
+          mood: "smug",
           avoid: seen,
         }),
       );

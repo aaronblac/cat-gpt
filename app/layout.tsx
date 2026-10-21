@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cat-gpt-six.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "CatGPT · Artificial Feline Intelligence",
   description:
     "A wearable, party-ready AI cat with opinions. Ask it anything and regret it immediately.",

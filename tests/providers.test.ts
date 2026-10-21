@@ -5,7 +5,7 @@ import type { BrainConfig } from "@/lib/config";
 const base = {
   question: "Are you single?",
   mode: "ask" as const,
-  mood: "frisky" as const,
+  mood: "smug" as const,
   avoid: ["An older joke."],
   maxAnswerChars: 220,
 };
@@ -52,8 +52,8 @@ describe("provider adapter", () => {
     expect(url).toBe("https://api.openai.com/v1/chat/completions");
     const body = JSON.parse(String(init.body));
     expect(body.messages[0].role).toBe("system");
-    expect(body.messages[0].content).toContain("MODE: OPEN QUESTIONS");
-    expect(body.messages[0].content).toContain("CURRENT MOOD: FRISKY");
+    expect(body.messages[0].content).toContain("MODE: ASK — THE ORACLE");
+    expect(body.messages[0].content).toContain("CURRENT MOOD: SMUG");
     expect(body.messages[1].content).toContain("<guest_question>");
     expect(body.presence_penalty).toBeGreaterThan(0);
     expect(body.max_tokens).toBeLessThanOrEqual(200);

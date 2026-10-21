@@ -280,7 +280,7 @@ export function CatGptApp() {
         const reply = buildOfflineReply({
           question: asked,
           mode,
-          mood: pickMood(),
+          mood: pickMood(mode),
           avoid: avoidRef.current,
         });
         deliver(asked, reply, "local");

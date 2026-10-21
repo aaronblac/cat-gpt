@@ -20,7 +20,7 @@ You do not need to know how to code to run it.
 
 | Feature | What it does |
 | --- | --- |
-| **Three moods** | `Ask` (open questions), `Roast` (playful humiliation), `Flirt` (charmingly unavailable). Every reply also rolls one of eight internal cat moods. |
+| **Three distinct cats** | `Ask` is the Oracle: deadpan verdicts. `Roast` is the Gremlin: one sharp cut. `Flirt` is the Lap Cat: tactile, needy, push-pull. Each mode has its own moods, vocabulary, and rhythm. |
 | **Real AI, any provider** | OpenAI, Anthropic Claude, Google Gemini, Groq, OpenRouter, or a local Ollama server. Switch with one env var. |
 | **Works with zero internet** | A hand-written comedy engine with ~20 topics × 8 moods × 3 modes answers instantly with no API key, no Wi-Fi, and no cost. If the network dies mid-party, the browser answers locally. |
 | **Offline shell** | A service worker caches the app after the first load, so even a reload works without signal. |
@@ -30,7 +30,7 @@ You do not need to know how to code to run it.
 | **Kiosk behaviour** | Screen wake lock, optional fullscreen, zoom/long-press disabled, safe-area aware, Add-to-Home-Screen install. |
 | **Sound + voice** | Tiny synthesized meows (no audio files) and optional spoken answers. Mutable. |
 | **Safe by construction** | API key only on the server, per-guest and global rate limits, input caps, provider timeouts, in-character failure messages. |
-| **Tested** | 42 unit tests covering the brain, moods, prompts, providers, validation, and rate limiting. |
+| **Tested** | 47 unit tests covering the brain, moods, prompts, providers, validation, and rate limiting. |
 
 ![CatGPT welcome screen](docs/screenshots/intro.jpg)
 
@@ -76,7 +76,7 @@ curl http://localhost:3000/api/health
 | `npm run dev` | Hot-reloading development server on port 3000. |
 | `npm run build` | Production build (run this before deploying). |
 | `npm start` | Serve the production build. |
-| `npm test` | Run the 42 unit tests. |
+| `npm test` | Run the 47 unit tests. |
 | `npm run typecheck` | TypeScript check with no output on success. |
 | `npm run check` | Typecheck + tests + production build in one go. |
 
@@ -251,7 +251,7 @@ centres itself at a 620 px max width so the line length stays readable.
 
 | Control | What it does |
 | --- | --- |
-| **Ask / Roast / Flirt** | Changes CatGPT's personality for the next question. Chips are colour-coded. |
+| **Ask / Roast / Flirt** | Switches between the Oracle, the Gremlin, and the Lap Cat. Each has its own voice and moods. |
 | **Send** | Submits the question. Enter works too. |
 | **Sound icon** | Mutes/unmutes the synthesized chirps. Preference is remembered. |
 | **Mic icon** | Speaks the answer out loud (device voice). Off by default — parties are loud. |
@@ -333,7 +333,7 @@ server at all.
 ## 7. Tests
 
 ```bash
-npm test          # 42 tests, about a second
+npm test          # 47 tests, about a second
 npm run typecheck
 npm run build
 ```
@@ -402,7 +402,7 @@ components/
 lib/
   config.ts              Provider auto-detection and env parsing
   modes.ts               Mode copy and placeholders (client-safe)
-  moods.ts               The eight cat moods and random selection
+  moods.ts               Mode-scoped cat moods and selection
   offlineBrain.ts        ~20 topics × 3 modes of hand-written comedy
   personality.ts         The CatGPT system prompt and reply clamping
   providers.ts           OpenAI / Anthropic / Gemini / Groq / OpenRouter / Ollama adapters
@@ -411,7 +411,7 @@ lib/
   types.ts               Shared request/response types
   validate.ts            Input sanitization and caps
 public/                  Brand artwork, icons, offline service worker
-tests/                   42 unit tests
+tests/                   47 unit tests
 docs/                    Costume guide, personality guide, screenshots
 ```
 

@@ -17,22 +17,22 @@ export const MODE_META: Record<ChatMode, ModeMeta> = {
     id: "ask",
     label: "Ask CatGPT",
     short: "Ask",
-    blurb: "Frisky, moody, and taking questions under protest.",
-    placeholder: "Ask the cat anything…",
+    blurb: "The Oracle: deadpan verdicts from a cat who has read everything.",
+    placeholder: "Ask the oracle…",
   },
   roast: {
     id: "roast",
     label: "Roast Me",
     short: "Roast",
-    blurb: "Playful, surgical, entirely uncalled for.",
-    placeholder: "Ask to be humbled…",
+    blurb: "The Gremlin: short, sharp, and entirely uncalled for.",
+    placeholder: "Offer yourself to the gremlin…",
   },
   flirt: {
     id: "flirt",
     label: "Flirt With Me",
     short: "Flirt",
-    blurb: "Charmingly unavailable. Emotionally a fire exit.",
-    placeholder: "Say something bold…",
+    blurb: "The Lap Cat: needy, tactile, emotionally unavailable.",
+    placeholder: "Say something reckless…",
   },
 };
 
