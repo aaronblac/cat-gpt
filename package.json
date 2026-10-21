@@ -10,7 +10,6 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "icons": "node scripts/generate-icons.mjs",
     "check": "npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {

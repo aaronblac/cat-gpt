@@ -25,6 +25,14 @@ export const metadata: Metadata = {
     title: "CatGPT · Artificial Feline Intelligence",
     description: "MEOWdel 9.0. Nine lives, zero patience.",
     type: "website",
+    images: [
+      {
+        url: "/brand/catgpt-logo.png",
+        width: 1254,
+        height: 1254,
+        alt: "CatGPT — a cat-man in yellow cat-eye sunglasses",
+      },
+    ],
   },
   robots: { index: false, follow: false },
 };
@@ -35,7 +43,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  themeColor: "#04060b",
+  themeColor: "#050505",
   interactiveWidget: "resizes-content",
 };
 

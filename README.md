@@ -1,5 +1,9 @@
 # CatGPT — Artificial Feline Intelligence
 
+<p align="center">
+  <img src="public/brand/catgpt-logo.png" alt="CatGPT logo: a cat-man in yellow cat-eye sunglasses and a studded collar" width="360" />
+</p>
+
 A wearable, party-ready AI cat with opinions. Guests type a question into the screen on your
 chest; CatGPT answers in one or two sentences of deadpan, flirtatious, deeply cat-shaped
 judgement. Then the screen clears itself for the next victim.
@@ -22,7 +26,7 @@ You do not need to know how to code to run it.
 | **Offline shell** | A service worker caches the app after the first load, so even a reload works without signal. |
 | **No preset questions** | Guests type whatever they want. The interface is just the cat, the input, and three moods. |
 | **Fresh every time** | Each request rolls a mood, recent answers are excluded, and live models get repetition penalties. The offline engine alone produced 12/12 unique replies to the same question in testing. |
-| **Party-proof UI** | Glowing animated cat, "Purrcessing…" state, huge readable answers, guest counter, auto-reset countdown. |
+| **Party-proof UI** | Illustrated cat-man mascot, "Purrcessing…" state, huge readable answers, guest counter, auto-reset countdown. |
 | **Kiosk behaviour** | Screen wake lock, optional fullscreen, zoom/long-press disabled, safe-area aware, Add-to-Home-Screen install. |
 | **Sound + voice** | Tiny synthesized meows (no audio files) and optional spoken answers. Mutable. |
 | **Safe by construction** | API key only on the server, per-guest and global rate limits, input caps, provider timeouts, in-character failure messages. |
@@ -75,7 +79,6 @@ curl http://localhost:3000/api/health
 | `npm test` | Run the 42 unit tests. |
 | `npm run typecheck` | TypeScript check with no output on success. |
 | `npm run check` | Typecheck + tests + production build in one go. |
-| `npm run icons` | Regenerate the app icons in `public/icons`. |
 
 ---
 
@@ -394,7 +397,7 @@ app/
   manifest.ts            Add-to-Home-Screen manifest
   page.tsx               Renders the app
 components/
-  CatAvatar.tsx          Hand-built animated SVG cat
+  CatAvatar.tsx          The illustrated mascot with its spinning halo
   CatGptApp.tsx          The kiosk UI and interaction logic
 lib/
   config.ts              Provider auto-detection and env parsing
@@ -407,10 +410,7 @@ lib/
   sfx.ts                 Synthesized WebAudio chirps
   types.ts               Shared request/response types
   validate.ts            Input sanitization and caps
-scripts/generate-icons.mjs   Dependency-free PNG icon generator
-public/
-  sw.js                  Offline app-shell service worker
-  icons/                 Generated PWA icons
+public/                  Brand artwork, icons, offline service worker
 tests/                   42 unit tests
 docs/                    Costume guide, personality guide, screenshots
 ```

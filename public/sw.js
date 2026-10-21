@@ -9,7 +9,7 @@
  *
  * Bump CACHE_VERSION when you want to force old caches out on the next visit.
  */
-const CACHE_VERSION = "catgpt-v1";
+const CACHE_VERSION = "catgpt-v2";
 const SHELL = ["/", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (event) => {

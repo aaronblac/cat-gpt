@@ -5,15 +5,18 @@
    ========================================================================== */
 
 :root {
-  --ink: #04060b;
-  --ink-2: #070b14;
-  --panel: rgba(9, 15, 26, 0.72);
-  --cyan: #5ee7ff;
-  --violet: #7b8cff;
-  --pink: #ff5cc8;
-  --text: #eaf6ff;
-  --muted: #8ba3bd;
-  --line: rgba(120, 200, 255, 0.16);
+  --ink: #050505;
+  --ink-2: #0a0a08;
+  --panel: rgba(12, 12, 10, 0.72);
+  --lime: #c8f53c;
+  --gold: #e5c76b;
+  --rose: #ff9fb4;
+  --cyan: var(--lime);
+  --violet: var(--gold);
+  --pink: var(--rose);
+  --text: #f7f7ee;
+  --muted: #b9b7a5;
+  --line: rgba(200, 245, 60, 0.16);
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
   --safe-top: env(safe-area-inset-top, 0px);
@@ -91,9 +94,9 @@ button {
 .bg-aurora {
   inset: -20%;
   background:
-    radial-gradient(42% 32% at 50% 16%, rgba(94, 231, 255, 0.22), transparent 70%),
-    radial-gradient(38% 30% at 86% 74%, rgba(255, 92, 200, 0.15), transparent 72%),
-    radial-gradient(46% 42% at 8% 82%, rgba(123, 140, 255, 0.18), transparent 72%);
+    radial-gradient(42% 32% at 50% 16%, rgba(200, 245, 60, 0.22), transparent 70%),
+    radial-gradient(38% 30% at 86% 74%, rgba(255, 159, 180, 0.15), transparent 72%),
+    radial-gradient(46% 42% at 8% 82%, rgba(229, 199, 107, 0.18), transparent 72%);
   filter: blur(14px);
   animation: aurora-drift 20s ease-in-out infinite alternate;
 }
@@ -101,8 +104,8 @@ button {
 .bg-grid {
   z-index: -2;
   background-image:
-    linear-gradient(rgba(120, 200, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(120, 200, 255, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(200, 245, 60, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 245, 60, 0.06) 1px, transparent 1px);
   background-size: 44px 44px;
   -webkit-mask-image: radial-gradient(120% 78% at 50% 28%, #000 26%, transparent 76%);
   mask-image: radial-gradient(120% 78% at 50% 28%, #000 26%, transparent 76%);
@@ -125,7 +128,7 @@ button {
   justify-content: space-between;
   gap: 8px;
   padding-bottom: 9px;
-  border-bottom: 1px solid rgba(120, 200, 255, 0.1);
+  border-bottom: 1px solid rgba(200, 245, 60, 0.1);
 }
 
 .brand {
@@ -156,10 +159,11 @@ button {
 }
 
 .wordmark-accent {
-  background: linear-gradient(100deg, var(--cyan), var(--violet) 55%, var(--pink));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  color: var(--lime);
+  text-shadow: 0 0 24px rgba(200, 245, 60, 0.32);
 }
 
 .subline {
@@ -190,9 +194,9 @@ button {
   align-items: center;
   gap: 5px;
   padding: 5px 8px;
-  border: 1px solid rgba(94, 231, 255, 0.26);
+  border: 1px solid rgba(200, 245, 60, 0.26);
   border-radius: 999px;
-  background: rgba(94, 231, 255, 0.06);
+  background: rgba(200, 245, 60, 0.06);
   color: var(--cyan);
   font-family: var(--mono);
   font-size: 8px;
@@ -211,8 +215,8 @@ button {
 }
 
 .online--local {
-  border-color: rgba(255, 92, 200, 0.3);
-  background: rgba(255, 92, 200, 0.07);
+  border-color: rgba(255, 159, 180, 0.3);
+  background: rgba(255, 159, 180, 0.07);
   color: var(--pink);
 }
 
@@ -233,17 +237,17 @@ button {
   height: 29px;
   padding: 0;
   place-items: center;
-  border: 1px solid rgba(120, 200, 255, 0.16);
+  border: 1px solid rgba(200, 245, 60, 0.16);
   border-radius: 50%;
   background: rgba(8, 14, 24, 0.6);
-  color: #71889e;
+  color: #9b9a88;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
 
 .icon-btn.is-on {
-  border-color: rgba(94, 231, 255, 0.4);
-  background: rgba(94, 231, 255, 0.08);
+  border-color: rgba(200, 245, 60, 0.4);
+  background: rgba(200, 245, 60, 0.08);
   color: var(--cyan);
 }
 
@@ -289,16 +293,16 @@ button {
   position: absolute;
   inset: -12%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(94, 231, 255, 0.3), transparent 64%);
+  background: radial-gradient(circle, rgba(200, 245, 60, 0.3), transparent 64%);
   content: "";
   filter: blur(18px);
   animation: breathe 6s ease-in-out infinite;
 }
 
 .intro-halo .cat-avatar {
-  width: clamp(190px, 46vh, 420px) !important;
+  width: clamp(180px, 34vh, 292px) !important;
   height: auto !important;
-  filter: drop-shadow(0 0 46px rgba(94, 231, 255, 0.34));
+  filter: drop-shadow(0 0 46px rgba(200, 245, 60, 0.3));
 }
 
 /* --- Conversation -------------------------------------------------------- */
@@ -355,13 +359,13 @@ button {
 .bubble--guest {
   align-self: flex-end;
   max-width: 86%;
-  border: 1px solid rgba(140, 170, 200, 0.16);
+  border: 1px solid rgba(210, 210, 190, 0.16);
   border-bottom-right-radius: 4px;
-  background: rgba(14, 22, 36, 0.74);
+  background: rgba(20, 20, 18, 0.74);
 }
 
 .bubble--guest p {
-  color: #c6d8e6;
+  color: #d8d6c8;
   font-size: clamp(15px, 3.9vw, 18px);
   font-weight: 500;
   line-height: 1.35;
@@ -369,13 +373,13 @@ button {
 
 .bubble--cat {
   align-self: flex-start;
-  border: 1px solid rgba(94, 231, 255, 0.3);
+  border: 1px solid rgba(200, 245, 60, 0.3);
   border-bottom-left-radius: 4px;
   background:
-    linear-gradient(158deg, rgba(20, 40, 64, 0.92), rgba(12, 18, 32, 0.94) 55%, rgba(30, 16, 44, 0.92));
+    linear-gradient(158deg, rgba(30, 36, 20, 0.94), rgba(12, 12, 10, 0.95) 55%, rgba(36, 30, 12, 0.92));
   box-shadow:
-    0 0 0 1px rgba(94, 231, 255, 0.05),
-    0 20px 44px -22px rgba(94, 231, 255, 0.55),
+    0 0 0 1px rgba(200, 245, 60, 0.05),
+    0 20px 44px -22px rgba(200, 245, 60, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
@@ -407,7 +411,7 @@ button {
   height: 2px;
   margin-top: 10px;
   border-radius: 2px;
-  background: rgba(94, 231, 255, 0.12);
+  background: rgba(200, 245, 60, 0.12);
   overflow: hidden;
 }
 
@@ -433,7 +437,7 @@ button {
   display: flex;
   gap: 3px;
   padding: 4px;
-  border: 1px solid rgba(120, 200, 255, 0.13);
+  border: 1px solid rgba(200, 245, 60, 0.13);
   border-radius: 999px;
   background: rgba(7, 12, 21, 0.72);
 }
@@ -444,7 +448,7 @@ button {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #7d93a9;
+  color: #a8a795;
   cursor: pointer;
   font-family: var(--mono);
   font-size: 9px;
@@ -454,21 +458,21 @@ button {
 }
 
 .mode.is-active {
-  background: linear-gradient(100deg, var(--cyan), #8beeff);
-  box-shadow: 0 0 20px rgba(94, 231, 255, 0.35);
+  background: linear-gradient(100deg, var(--cyan), #e4ff9a);
+  box-shadow: 0 0 20px rgba(200, 245, 60, 0.35);
   color: #03121a;
   font-weight: 700;
 }
 
 .mode:nth-child(2).is-active {
-  background: linear-gradient(100deg, var(--pink), #ffa3e2);
-  box-shadow: 0 0 20px rgba(255, 92, 200, 0.35);
+  background: linear-gradient(100deg, var(--pink), #ffc2d1);
+  box-shadow: 0 0 20px rgba(255, 159, 180, 0.35);
   color: #1a0412;
 }
 
 .mode:nth-child(3).is-active {
-  background: linear-gradient(100deg, var(--violet), #b6c2ff);
-  box-shadow: 0 0 20px rgba(123, 140, 255, 0.35);
+  background: linear-gradient(100deg, var(--violet), #ffe6a3);
+  box-shadow: 0 0 20px rgba(229, 199, 107, 0.35);
   color: #080a22;
 }
 
@@ -483,7 +487,7 @@ button {
   height: 48px;
   flex: 1;
   padding: 0 14px;
-  border: 1px solid rgba(120, 200, 255, 0.22);
+  border: 1px solid rgba(200, 245, 60, 0.22);
   border-radius: 13px;
   outline: none;
   background: rgba(6, 11, 19, 0.88);
@@ -496,12 +500,12 @@ button {
 }
 
 .ask-input::placeholder {
-  color: #5c7188;
+  color: #7d7c6c;
 }
 
 .ask-input:focus {
-  border-color: rgba(94, 231, 255, 0.62);
-  box-shadow: 0 0 0 3px rgba(94, 231, 255, 0.12), inset 0 0 26px rgba(94, 231, 255, 0.06);
+  border-color: rgba(200, 245, 60, 0.62);
+  box-shadow: 0 0 0 3px rgba(200, 245, 60, 0.12), inset 0 0 26px rgba(200, 245, 60, 0.06);
 }
 
 .ask-input:disabled {
@@ -515,10 +519,10 @@ button {
   flex: 0 0 auto;
   padding: 0;
   place-items: center;
-  border: 1px solid rgba(94, 231, 255, 0.55);
+  border: 1px solid rgba(200, 245, 60, 0.55);
   border-radius: 13px;
-  background: linear-gradient(160deg, #8df0ff, #6a7dff);
-  box-shadow: 0 10px 26px -12px rgba(94, 231, 255, 0.9);
+  background: linear-gradient(160deg, #ddff80, #a8c92e);
+  box-shadow: 0 10px 26px -12px rgba(200, 245, 60, 0.9);
   color: #031018;
   cursor: pointer;
   transition: transform 0.12s, opacity 0.2s, box-shadow 0.2s;
@@ -540,7 +544,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 18px;
-  color: #5d7288;
+  color: #8b8a78;
   font-family: var(--mono);
   font-size: 8px;
   letter-spacing: 0.12em;
@@ -587,14 +591,14 @@ button {
 }
 
 .next-time {
-  color: #a7bdcf;
+  color: #c9c7b4;
 }
 
 .timerbar {
   height: 2px;
   margin-top: 1px;
   border-radius: 2px;
-  background: rgba(120, 200, 255, 0.09);
+  background: rgba(200, 245, 60, 0.09);
   overflow: hidden;
 }
 
@@ -603,7 +607,7 @@ button {
   height: 100%;
   border-radius: 2px;
   background: linear-gradient(90deg, var(--cyan), var(--violet));
-  box-shadow: 0 0 10px rgba(94, 231, 255, 0.6);
+  box-shadow: 0 0 10px rgba(200, 245, 60, 0.6);
   transition: width 1s linear;
 }
 
@@ -614,10 +618,10 @@ button {
   align-items: flex-start;
   gap: 8px;
   padding: 8px 10px;
-  border: 1px solid rgba(255, 92, 200, 0.35);
+  border: 1px solid rgba(255, 159, 180, 0.35);
   border-radius: 10px;
-  background: rgba(56, 10, 34, 0.8);
-  color: #ffd6ee;
+  background: rgba(52, 26, 8, 0.82);
+  color: #ffe4c4;
   font-size: 11px;
   line-height: 1.35;
   animation: bubble-in 0.25s ease both;
@@ -628,57 +632,122 @@ button {
   padding: 0 2px;
   border: 0;
   background: none;
-  color: #ffaee0;
+  color: #ffb877;
   cursor: pointer;
   font-size: 16px;
   line-height: 1;
 }
 
-/* --- Cat avatar motion --------------------------------------------------- */
+/* --- Cat avatar ---------------------------------------------------------- */
 
 .cat-avatar {
+  position: relative;
   display: grid;
   flex: 0 0 auto;
+  isolation: isolate;
   place-items: center;
-  filter: drop-shadow(0 0 22px rgba(94, 231, 255, 0.22));
+  filter: drop-shadow(0 0 26px rgba(200, 245, 60, 0.2));
 }
 
-.cat-avatar svg {
-  display: block;
-  overflow: visible;
+.cat-avatar::before {
+  position: absolute;
+  z-index: -1;
+  inset: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 245, 60, 0.18), transparent 66%);
+  content: "";
+  filter: blur(16px);
 }
 
-.cat-float {
-  transform-origin: 100px 100px;
-  animation: float 7s ease-in-out infinite;
+.cat-ring {
+  position: absolute;
+  inset: -9%;
+  border: 1.5px dashed rgba(200, 245, 60, 0.55);
+  border-radius: 50%;
+  animation: spin 30s linear infinite;
+  pointer-events: none;
 }
 
-.cat-avatar--thinking .cat-float {
-  animation-duration: 2.4s;
-}
-
-.cat-halo-dash {
-  transform-origin: 100px 100px;
-  animation: spin 26s linear infinite;
-}
-
-.cat-halo-dash--slow {
+.cat-ring--slow {
+  inset: -15%;
+  border: 1px solid rgba(229, 199, 107, 0.26);
   animation-direction: reverse;
-  animation-duration: 42s;
+  animation-duration: 48s;
 }
 
-.cat-eyes {
-  transform-origin: 100px 98px;
-  animation: blink 7s infinite;
+.cat-photo-shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(200, 245, 60, 0.36);
+  border-radius: 22%;
+  background: var(--ink);
+  box-shadow:
+    inset 0 0 36px rgba(0, 0, 0, 0.85),
+    0 0 32px rgba(200, 245, 60, 0.16);
+  overflow: hidden;
+  animation: float 8s ease-in-out infinite;
 }
 
-.cat-whiskers {
-  animation: whisker 4.5s ease-in-out infinite;
+.cat-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  filter: contrast(1.06) saturate(1.04);
+  pointer-events: none;
+  user-select: none;
 }
 
-.cat-orbit {
-  transform-origin: 100px 100px;
-  animation: spin 3.6s linear infinite;
+.brand .cat-photo {
+  transform: scale(1.18);
+  transform-origin: 50% 24%;
+}
+
+.brand .cat-ring,
+.bubble-label .cat-ring,
+.bubble-label .cat-thinking-dots {
+  display: none;
+}
+
+.bubble-label .cat-photo-shell {
+  animation: none;
+}
+
+.cat-avatar--thinking .cat-photo-shell {
+  animation-duration: 3.6s;
+}
+
+.cat-avatar--thinking .cat-ring {
+  animation-duration: 7s;
+}
+
+.cat-thinking-dots {
+  position: absolute;
+  right: -1%;
+  bottom: 2%;
+  z-index: 2;
+  display: flex;
+  gap: 3px;
+}
+
+.cat-thinking-dots i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 8px var(--lime);
+  animation: thinking-bounce 1.2s ease-in-out infinite;
+}
+
+.cat-thinking-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.cat-thinking-dots i:nth-child(3) {
+  animation-delay: 0.3s;
 }
 
 /* --- Motion -------------------------------------------------------------- */
@@ -720,24 +789,16 @@ button {
   }
 }
 
-@keyframes blink {
+@keyframes thinking-bounce {
   0%,
-  91%,
+  60%,
   100% {
-    transform: scaleY(1);
+    transform: translateY(0);
+    opacity: 0.55;
   }
-  94% {
-    transform: scaleY(0.08);
-  }
-}
-
-@keyframes whisker {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.7;
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
   }
 }
 
@@ -837,6 +898,9 @@ button {
   .stage {
     padding-right: 22px;
     padding-left: 22px;
+  }
+  .intro-halo .cat-avatar {
+    width: clamp(280px, 36vh, 380px) !important;
   }
 }
 
