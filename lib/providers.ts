@@ -257,6 +257,8 @@ async function callAnthropic(
       system,
       max_tokens: ANTHROPIC_OUTPUT_TOKENS,
       // API version 2026-10-21 rejects temperature/top_p/top_k with a 400.
+      // Haiku 5.5 thinks adaptively by default; these are one-liners, so skip it.
+      thinking: { type: "disabled" },
       messages: [{ role: "user", content: user }],
     }),
     signal: timeoutSignal(),

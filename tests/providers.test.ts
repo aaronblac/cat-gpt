@@ -108,6 +108,7 @@ describe("provider adapter", () => {
     expect(body.model).toBe("claude-haiku-5-5");
     expect(body.max_tokens).toBeGreaterThanOrEqual(500);
     expect(body.temperature).toBeUndefined();
+    expect(body.thinking).toEqual({ type: "disabled" });
     expect(body.system).toContain("CatGPT");
     expect(body.messages[0].content).toContain("Are you single?");
   });
