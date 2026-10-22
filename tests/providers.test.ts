@@ -92,7 +92,7 @@ describe("provider adapter", () => {
       ...base,
       config: {
         provider: "anthropic",
-        model: "claude-haiku-4-5",
+        model: "claude-haiku-5-5",
         apiKey: "sk-ant",
         ready: true,
       },
@@ -103,6 +103,8 @@ describe("provider adapter", () => {
     expect(url).toBe("https://api.anthropic.com/v1/messages");
     expect((init.headers as Record<string, string>)["x-api-key"]).toBe("sk-ant");
     const body = JSON.parse(String(init.body));
+    expect(body.model).toBe("claude-haiku-5-5");
+    expect(body.max_tokens).toBeGreaterThanOrEqual(500);
     expect(body.system).toContain("CatGPT");
     expect(body.messages[0].content).toContain("Are you single?");
   });

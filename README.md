@@ -89,7 +89,7 @@ The offline engine is genuinely funny, but a live model improvises better. Pick 
 | Provider | Env var | Default model | Good for |
 | --- | --- | --- | --- |
 | OpenAI | `OPENAI_API_KEY` | `gpt-4o-mini` | Easiest all-rounder; short, snappy jokes. |
-| Anthropic | `ANTHROPIC_API_KEY` | `claude-haiku-4-5` | Dry, characterful writing. |
+| Anthropic | `ANTHROPIC_API_KEY` | `claude-haiku-5-5` | Best character writing. Start tier: 1K RPM, 2M input tokens/min, 400K output tokens/min. |
 | Google Gemini | `GOOGLE_GENERATIVE_AI_API_KEY` | `gemini-3.5-flash` | Stable (~4s), with automatic fallback to `gemini-3.1-flash-lite`. Free tier is only **20 requests/day per model** — enable billing for a party. |
 | Groq | `GROQ_API_KEY` | `openai/gpt-oss-120b` | Very low latency. Free tier: 30 RPM, **1,000 requests/day**, **8K tokens/min**, **200K tokens/day**. |
 | OpenRouter | `OPENROUTER_API_KEY` | `google/gemini-3.5-flash-lite` | One key for many models. |
@@ -144,7 +144,7 @@ curl -X POST http://localhost:3000/api/chat \
 - Keep answers short: `CATGPT_MAX_ANSWER_CHARS=220` (already the default) and output tokens are
   capped at 160 on the server.
 - Set `CATGPT_GLOBAL_LIMIT` to the maximum number of questions per minute you are willing to pay for.
-- Use `gpt-4o-mini`, `gemini-3.5-flash`, `claude-haiku-4-5`, or Groq's free/cheap tier.
+- Use `gpt-4o-mini`, `gemini-3.5-flash`, `claude-haiku-5-5`, or Groq's free/cheap tier.
 
 > **Gemini model tip:** `gemini-3.5-flash` is the current default, with `gemini-3.1-flash-lite` as an
 > automatic fallback. The older `gemini-3.5-flash-lite` ID is remapped because Google is returning

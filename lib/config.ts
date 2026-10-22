@@ -27,7 +27,7 @@ const PROVIDERS: ProviderDefinition[] = [
     id: "anthropic",
     apiKeyEnv: "ANTHROPIC_API_KEY",
     modelEnv: "ANTHROPIC_MODEL",
-    defaultModel: "claude-haiku-4-5",
+    defaultModel: "claude-haiku-5-5",
   },
   {
     id: "google",

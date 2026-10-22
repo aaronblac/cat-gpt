@@ -34,6 +34,8 @@ export interface GenerateResult {
 const REQUEST_TIMEOUT_MS = 9_000;
 /** Short budget for non-thinking providers; the prompt caps the answer anyway. */
 const TEXT_OUTPUT_TOKENS = 200;
+/** Claude 5.x may use adaptive thinking, so leave room for reasoning + the reply. */
+const ANTHROPIC_OUTPUT_TOKENS = 800;
 /** Thinking models need room for internal reasoning plus the visible answer. */
 const GOOGLE_OUTPUT_TOKENS = 1600;
 const GOOGLE_COOLDOWN_MS = 10 * 60_000;
@@ -253,7 +255,7 @@ async function callAnthropic(
     body: JSON.stringify({
       model,
       system,
-      max_tokens: TEXT_OUTPUT_TOKENS,
+      max_tokens: ANTHROPIC_OUTPUT_TOKENS,
       temperature: 1,
       messages: [{ role: "user", content: user }],
     }),
