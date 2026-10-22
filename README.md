@@ -30,7 +30,7 @@ You do not need to know how to code to run it.
 | **Kiosk behaviour** | Screen wake lock, optional fullscreen, zoom/long-press disabled, safe-area aware, Add-to-Home-Screen install. |
 | **Sound + voice** | Tiny synthesized meows (no audio files) and optional spoken answers. Mutable. |
 | **Safe by construction** | API key only on the server, per-guest and global rate limits, input caps, provider timeouts, in-character failure messages. |
-| **Tested** | 47 unit tests covering the brain, moods, prompts, providers, validation, and rate limiting. |
+| **Tested** | 53 unit tests covering the brain, moods, prompts, providers, validation, and rate limiting. |
 
 ![CatGPT welcome screen](docs/screenshots/intro.jpg)
 
@@ -76,7 +76,7 @@ curl http://localhost:3000/api/health
 | `npm run dev` | Hot-reloading development server on port 3000. |
 | `npm run build` | Production build (run this before deploying). |
 | `npm start` | Serve the production build. |
-| `npm test` | Run the 47 unit tests. |
+| `npm test` | Run the 53 unit tests. |
 | `npm run typecheck` | TypeScript check with no output on success. |
 | `npm run check` | Typecheck + tests + production build in one go. |
 
@@ -90,7 +90,7 @@ The offline engine is genuinely funny, but a live model improvises better. Pick 
 | --- | --- | --- | --- |
 | OpenAI | `OPENAI_API_KEY` | `gpt-4o-mini` | Easiest all-rounder; short, snappy jokes. |
 | Anthropic | `ANTHROPIC_API_KEY` | `claude-haiku-4-5` | Dry, characterful writing. |
-| Google Gemini | `GOOGLE_GENERATIVE_AI_API_KEY` | `gemini-3.5-flash-lite` | Cheap, fast (~1s), and does not “think” before answering. |
+| Google Gemini | `GOOGLE_GENERATIVE_AI_API_KEY` | `gemini-3.5-flash` | Stable (~4s), with automatic fallback to `gemini-3.1-flash-lite`. Free tier is only **20 requests/day per model** — enable billing for a party. |
 | Groq | `GROQ_API_KEY` | `llama-3.3-70b-versatile` | Very low latency. |
 | OpenRouter | `OPENROUTER_API_KEY` | `google/gemini-3.5-flash-lite` | One key for many models. |
 | Ollama | `OLLAMA_BASE_URL` | `llama3.2` | Runs on a laptop in your bag; no cloud bill. |
@@ -144,11 +144,26 @@ curl -X POST http://localhost:3000/api/chat \
 - Keep answers short: `CATGPT_MAX_ANSWER_CHARS=220` (already the default) and output tokens are
   capped at 160 on the server.
 - Set `CATGPT_GLOBAL_LIMIT` to the maximum number of questions per minute you are willing to pay for.
-- Use `gpt-4o-mini`, `gemini-3.5-flash-lite`, `claude-haiku-4-5`, or Groq's free/cheap tier.
+- Use `gpt-4o-mini`, `gemini-3.5-flash`, `claude-haiku-4-5`, or Groq's free/cheap tier.
 
-> **Gemini model tip:** prefer the **lite** models (`gemini-3.5-flash-lite`) for a party. The
-> full “thinking” models can spend 25+ seconds reasoning and eat the output-token budget before
-> they write the joke.
+> **Gemini model tip:** `gemini-3.5-flash` is the current default, with `gemini-3.1-flash-lite` as an
+> automatic fallback. The older `gemini-3.5-flash-lite` ID is remapped because Google is returning
+> sustained 503s and 20s+ stalls for it. Full “thinking” models need a larger token budget, or they
+> eat the output before they write the joke.
+
+> **Free-tier reality check:** Google's Gemini free tier allows only **20 requests per day per
+> model**. A party burns through that in minutes; Google then returns `429 RESOURCE_EXHAUSTED`
+> with a retry time measured in hours. CatGPT correctly falls back to `OFFLINE WIT`. For a real
+> party, either enable billing on the Google key or switch to Groq:
+>
+> ```bash
+> CATGPT_PROVIDER=groq
+> GROQ_API_KEY=gsk_...
+> GROQ_MODEL=llama-3.3-70b-versatile
+> ```
+>
+> Groq's free tier is much more generous (roughly 30 requests/minute), and CatGPT already supports
+> it. The provider status pill will say `NEURAL LINK` when the model answers.
 - For a single evening, actual usage is usually a few dollars at most. Prices change — check your
   provider's current pricing page. This project makes no billing guarantees.
 
@@ -333,7 +348,7 @@ server at all.
 ## 7. Tests
 
 ```bash
-npm test          # 47 tests, about a second
+npm test          # 53 tests, about a second
 npm run typecheck
 npm run build
 ```
@@ -353,9 +368,9 @@ What is covered:
 | --- | --- |
 | "CatGPT has answered enough of your questions…" | Working as intended. Raise `CATGPT_RATE_LIMIT` or wait for the window. |
 | Status says `OFFLINE WIT` even though you added a key | Restart the dev server / redeploy after editing env. Check `/api/health` for the note, verify the exact variable name, and make sure `CATGPT_PROVIDER` is `auto` or matches your provider. |
-| Answers take several seconds | Use a fast model: `gemini-3.5-flash-lite` or Groq. Avoid Gemini “thinking” models like `gemini-3.8-flash`. After 12 seconds the server gives up and answers offline. |
-| Gemini replies are cut off mid-sentence | A thinking model is consuming the 160-token budget. Switch `GOOGLE_MODEL` to `gemini-3.5-flash-lite`. |
-| Gemini says the model is "no longer available to new users" | Google retires model IDs. List what your key can use, then set `GOOGLE_MODEL` to a current one (for example `gemini-3.5-flash-lite`). |
+| Answers take several seconds | Use a fast model: `gemini-3.5-flash` or Groq. After two 6-second attempts the server gives up and answers offline. |
+| Keeps falling back to `OFFLINE WIT` | Run a live probe: `curl -s "https://cat-gpt-six.vercel.app/api/health?probe=1"`. If `probe.reason` is `quota_exhausted`, the key hit Google's **20 requests/day free-tier limit**; `probe.quotaModel` and `probe.retryAfterSeconds` show the model and reset time. `quota_cooldown` / `provider_cooldown` means CatGPT is briefly skipping a dead API so replies stay instant. `http_503` = Google busy, `timeout` = model too slow, `blocked`/`safety` = safety filter, `not_configured` = key missing. |
+| Gemini says the model is "no longer available to new users" | Google retires model IDs. List what your key can use, then set `GOOGLE_MODEL` to a current one (for example `gemini-3.5-flash`). |
 | Answers feel too long or get cut off | Lower `CATGPT_MAX_ANSWER_CHARS` for punchier jokes. Raising it also allows longer model output; the token cap is 160. |
 | Keyboard covers the input on iPhone | iOS sometimes overlays the keyboard. The app requests resize behaviour; if it persists, the page should still scroll the field into view. Guided Access prevents accidental dismissal. |
 | Screen dims or locks | Disable Low Power Mode and set Auto-Lock to Never. Wake lock needs a visible tab and a supported browser. |
@@ -411,7 +426,7 @@ lib/
   types.ts               Shared request/response types
   validate.ts            Input sanitization and caps
 public/                  Brand artwork, icons, offline service worker
-tests/                   47 unit tests
+tests/                   53 unit tests
 docs/                    Costume guide, personality guide, screenshots
 ```
 

@@ -22,6 +22,8 @@ export interface ChatSuccess {
   mood?: string;
   /** Present only when a real model answered, e.g. "openai". */
   provider?: string;
+  /** Why the offline brain answered instead of the model, when applicable. */
+  fallbackReason?: string;
   /** Number of questions the guest may still ask in this window. */
   remaining?: number;
 }

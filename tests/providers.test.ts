@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { generateAiReply } from "@/lib/providers";
+import { generateAiReply, resetProviderCooldown } from "@/lib/providers";
 import type { BrainConfig } from "@/lib/config";
 
 const base = {
@@ -19,6 +19,7 @@ const openaiConfig: BrainConfig = {
 };
 
 afterEach(() => {
+  resetProviderCooldown();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
@@ -132,6 +133,178 @@ describe("provider adapter", () => {
     expect(url).toContain("models/gemini-3.5-flash-lite:generateContent");
     expect((init.headers as Record<string, string>)["x-goog-api-key"]).toBe("goog-key");
     expect(url).not.toContain("goog-key");
+    const body = JSON.parse(String(init.body));
+    expect(body.safetySettings).toHaveLength(4);
+  });
+
+  it("retries a transient Gemini failure once", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response("busy", { status: 503 }))
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: "Fine." }] } }] }), {
+          status: 200,
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const diagnostics = {};
+    const result = await generateAiReply({
+      ...base,
+      config: {
+        provider: "google",
+        model: "gemini-3.5-flash-lite",
+        apiKey: "goog-key",
+        ready: true,
+      },
+      diagnostics,
+    });
+
+    expect(result?.text).toBe("Fine.");
+    expect(diagnostics).toEqual({ latencyMs: expect.any(Number) });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("falls back to the alternate Gemini model when the primary is overloaded", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response("busy", { status: 503 }))
+      .mockResolvedValueOnce(new Response("busy", { status: 503 }))
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            candidates: [
+              { content: { parts: [{ text: "Fallback works." }] }, finishReason: "STOP" },
+            ],
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const diagnostics = {};
+    const result = await generateAiReply({
+      ...base,
+      config: {
+        provider: "google",
+        model: "gemini-3.5-flash",
+        fallbackModel: "gemini-3.1-flash-lite",
+        apiKey: "goog-key",
+        ready: true,
+      },
+      diagnostics,
+    });
+
+    expect(result?.text).toBe("Fallback works.");
+    expect(diagnostics).toMatchObject({ fallbackModel: "gemini-3.1-flash-lite" });
+
+    const urls = fetchMock.mock.calls.map(([url]) => String(url));
+    expect(urls[0]).toContain("models/gemini-3.5-flash:generateContent");
+    expect(urls[1]).toContain("models/gemini-3.5-flash:generateContent");
+    expect(urls[2]).toContain("models/gemini-3.1-flash-lite:generateContent");
+  });
+
+  it("reports a quota failure instead of hiding it", async () => {
+    const quotaBody = JSON.stringify({
+      error: {
+        code: 429,
+        message:
+          "You exceeded your current quota. Quota exceeded for metric: generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash. Please retry in 14h24m42s.",
+        status: "RESOURCE_EXHAUSTED",
+        details: [
+          {
+            "@type": "type.googleapis.com/google.rpc.QuotaFailure",
+            violations: [
+              {
+                quotaDimensions: { location: "global", model: "gemini-3.6-flash" },
+                quotaValue: "20",
+              },
+            ],
+          },
+          {
+            "@type": "type.googleapis.com/google.rpc.RetryInfo",
+            retryDelay: "51882s",
+          },
+        ],
+      },
+    });
+    const fetchMock = vi
+      .fn()
+      .mockImplementation(() => Promise.resolve(new Response(quotaBody, { status: 429 })));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const diagnostics = {};
+    const googleConfig: BrainConfig = {
+      provider: "google",
+      model: "gemini-3.5-flash",
+      apiKey: "goog-key",
+      ready: true,
+    };
+    const result = await generateAiReply({
+      ...base,
+      config: googleConfig,
+      diagnostics,
+    });
+
+    expect(result).toBeNull();
+    expect(diagnostics).toMatchObject({
+      reason: "quota_exhausted",
+      retryAfterSeconds: 51882,
+      quotaModel: "gemini-3.6-flash",
+      latencyMs: expect.any(Number),
+    });
+
+    // The next question should not wait on a known-dead API.
+    const followUp = {};
+    const second = await generateAiReply({
+      ...base,
+      config: googleConfig,
+      diagnostics: followUp,
+    });
+    expect(second).toBeNull();
+    expect(followUp).toMatchObject({
+      reason: "quota_cooldown",
+      retryAfterSeconds: 51882,
+      quotaModel: "gemini-3.6-flash",
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports a safety block instead of hiding it", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ promptFeedback: { blockReason: "SAFETY" }, candidates: [] }), {
+          status: 200,
+        }),
+      ),
+    );
+
+    const diagnostics = {};
+    const result = await generateAiReply({
+      ...base,
+      config: {
+        provider: "google",
+        model: "gemini-3.5-flash-lite",
+        apiKey: "goog-key",
+        ready: true,
+      },
+      diagnostics,
+    });
+
+    expect(result).toBeNull();
+    expect(diagnostics).toMatchObject({ reason: "blocked" });
+  });
+
+  it("marks the offline brain as not configured when probed", async () => {
+    const diagnostics = {};
+    const result = await generateAiReply({
+      ...base,
+      config: { provider: "offline", model: "offline-comedy-engine", ready: true },
+      diagnostics,
+    });
+    expect(result).toBeNull();
+    expect(diagnostics).toMatchObject({ reason: "not_configured" });
   });
 
   it("returns null and logs when the provider fails", async () => {

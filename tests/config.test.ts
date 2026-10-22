@@ -16,6 +16,29 @@ describe("brain configuration", () => {
     expect(resolveBrain({ GROQ_API_KEY: "gsk" }).provider).toBe("groq");
   });
 
+  it("gives Gemini a working fallback model automatically", () => {
+    const current = resolveBrain({ GOOGLE_GENERATIVE_AI_API_KEY: "key" });
+    expect(current).toMatchObject({
+      provider: "google",
+      model: "gemini-3.5-flash",
+      fallbackModel: "gemini-3.1-flash-lite",
+    });
+
+    const legacy = resolveBrain({
+      GOOGLE_GENERATIVE_AI_API_KEY: "key",
+      GOOGLE_MODEL: "gemini-3.5-flash-lite",
+    });
+    expect(legacy.model).toBe("gemini-3.5-flash");
+    expect(legacy.fallbackModel).toBe("gemini-3.1-flash-lite");
+
+    const explicit = resolveBrain({
+      GOOGLE_GENERATIVE_AI_API_KEY: "key",
+      GOOGLE_MODEL: "gemini-custom",
+      GOOGLE_FALLBACK_MODEL: "gemini-backup",
+    });
+    expect(explicit.fallbackModel).toBe("gemini-backup");
+  });
+
   it("honours an explicit provider and its model", () => {
     const brain = resolveBrain({
       CATGPT_PROVIDER: "openai",

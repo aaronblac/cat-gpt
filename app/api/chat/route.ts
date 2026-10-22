@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerConfig } from "@/lib/config";
 import { pickMood } from "@/lib/moods";
-import { generateAiReply } from "@/lib/providers";
+import { generateAiReply, type ProviderDiagnostics } from "@/lib/providers";
 import { buildOfflineReply } from "@/lib/offlineBrain";
 import { createRateLimiter, clientKeyFromHeaders } from "@/lib/rateLimit";
 import { isAnswerableQuestion, normalizeQuestion, parseMode, sanitizeAvoid } from "@/lib/validate";
@@ -9,6 +9,8 @@ import type { ChatApiResponse } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+/** Google can take a few seconds; leave room for a retry on cold starts. */
+export const maxDuration = 30;
 
 const config = getServerConfig();
 const guestLimiter = createRateLimiter({
@@ -74,13 +76,15 @@ export async function POST(request: Request) {
     return json({ error: "Type an actual question. CatGPT can't read vibes." }, 400);
   }
 
+  const diagnostics: ProviderDiagnostics = {};
   const ai = await generateAiReply({
     question,
     mode,
     mood,
-    avoid,
+    avoid: avoid.slice(0, 8),
     config: config.brain,
     maxAnswerChars: config.maxAnswerChars,
+    diagnostics,
   });
 
   if (ai) {
@@ -108,6 +112,9 @@ export async function POST(request: Request) {
     source: "offline",
     mode,
     mood,
+    fallbackReason:
+      diagnostics.reason ??
+      (config.brain.provider === "offline" ? "not_configured" : "unknown"),
     remaining: guestCheck.remaining,
   });
 }

@@ -33,7 +33,7 @@ const PROVIDERS: ProviderDefinition[] = [
     id: "google",
     apiKeyEnv: "GOOGLE_GENERATIVE_AI_API_KEY",
     modelEnv: "GOOGLE_MODEL",
-    defaultModel: "gemini-3.5-flash-lite",
+    defaultModel: "gemini-3.5-flash",
   },
   {
     id: "groq",
@@ -62,6 +62,8 @@ export interface BrainConfig {
   model: string;
   apiKey?: string;
   baseUrl?: string;
+  /** Optional second model to try when the first is overloaded or retired. */
+  fallbackModel?: string;
   /** False when the requested provider is missing credentials. */
   ready: boolean;
   note?: string;
@@ -119,11 +121,27 @@ export function resolveBrain(env: Env = process.env): BrainConfig {
     const apiKey = trim(env[provider.apiKeyEnv]);
     if (apiKey) {
       const overrideBase = provider.id === "openai" ? trim(env.OPENAI_BASE_URL) : "";
+      let model = trim(env[provider.modelEnv]) || provider.defaultModel;
+      // Hotfix (Oct 2026): gemini-3.5-flash-lite is returning sustained 503s and
+      // 20s+ stalls. Existing deployments that point at it are routed to the
+      // stable full flash model instead of being taken offline.
+      if (provider.id === "google" && model === "gemini-3.5-flash-lite") {
+        model = "gemini-3.5-flash";
+      }
+      const alternate = model === "gemini-3.5-flash" ? "gemini-3.1-flash-lite" : "gemini-3.5-flash";
+      const requestedFallbackRaw = provider.id === "google" ? trim(env.GOOGLE_FALLBACK_MODEL) : "";
+      const requestedFallback =
+        requestedFallbackRaw === "gemini-3.5-flash-lite"
+          ? "gemini-3.1-flash-lite"
+          : requestedFallbackRaw;
+      const fallbackModel =
+        provider.id === "google" ? (requestedFallback === model ? alternate : requestedFallback || alternate) : undefined;
       return {
         provider: provider.id,
-        model: trim(env[provider.modelEnv]) || provider.defaultModel,
+        model,
         apiKey,
         baseUrl: (overrideBase || provider.defaultBaseUrl || "").replace(/\/+$/, ""),
+        ...(fallbackModel ? { fallbackModel } : {}),
         ready: true,
       };
     }
