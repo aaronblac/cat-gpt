@@ -249,8 +249,8 @@ async function callAnthropic(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
+      Authorization: `Bearer ${apiKey}`,
+      "anthropic-version": "2026-10-21",
     },
     body: JSON.stringify({
       model,

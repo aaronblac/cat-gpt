@@ -101,7 +101,9 @@ describe("provider adapter", () => {
     expect(result).toEqual({ text: "I am the prize.", provider: "anthropic" });
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
     expect(url).toBe("https://api.anthropic.com/v1/messages");
-    expect((init.headers as Record<string, string>)["x-api-key"]).toBe("sk-ant");
+    expect((init.headers as Record<string, string>).Authorization).toBe("Bearer sk-ant");
+    expect((init.headers as Record<string, string>)["anthropic-version"]).toBe("2026-10-21");
+    expect((init.headers as Record<string, string>)["x-api-key"]).toBeUndefined();
     const body = JSON.parse(String(init.body));
     expect(body.model).toBe("claude-haiku-5-5");
     expect(body.max_tokens).toBeGreaterThanOrEqual(500);
