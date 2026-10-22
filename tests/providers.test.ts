@@ -107,6 +107,7 @@ describe("provider adapter", () => {
     const body = JSON.parse(String(init.body));
     expect(body.model).toBe("claude-haiku-5-5");
     expect(body.max_tokens).toBeGreaterThanOrEqual(500);
+    expect(body.temperature).toBeUndefined();
     expect(body.system).toContain("CatGPT");
     expect(body.messages[0].content).toContain("Are you single?");
   });
