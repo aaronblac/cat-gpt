@@ -91,7 +91,7 @@ The offline engine is genuinely funny, but a live model improvises better. Pick 
 | OpenAI | `OPENAI_API_KEY` | `gpt-4o-mini` | Easiest all-rounder; short, snappy jokes. |
 | Anthropic | `ANTHROPIC_API_KEY` | `claude-haiku-4-5` | Dry, characterful writing. |
 | Google Gemini | `GOOGLE_GENERATIVE_AI_API_KEY` | `gemini-3.5-flash` | Stable (~4s), with automatic fallback to `gemini-3.1-flash-lite`. Free tier is only **20 requests/day per model** — enable billing for a party. |
-| Groq | `GROQ_API_KEY` | `llama-3.3-70b-versatile` | Very low latency. |
+| Groq | `GROQ_API_KEY` | `openai/gpt-oss-120b` | Very low latency. Free tier: 30 RPM, **1,000 requests/day**, **8K tokens/min**, **200K tokens/day**. |
 | OpenRouter | `OPENROUTER_API_KEY` | `google/gemini-3.5-flash-lite` | One key for many models. |
 | Ollama | `OLLAMA_BASE_URL` | `llama3.2` | Runs on a laptop in your bag; no cloud bill. |
 
@@ -159,11 +159,16 @@ curl -X POST http://localhost:3000/api/chat \
 > ```bash
 > CATGPT_PROVIDER=groq
 > GROQ_API_KEY=gsk_...
-> GROQ_MODEL=llama-3.3-70b-versatile
+> GROQ_MODEL=openai/gpt-oss-120b
 > ```
 >
-> Groq's free tier is much more generous (roughly 30 requests/minute), and CatGPT already supports
-> it. The provider status pill will say `NEURAL LINK` when the model answers.
+> Groq's free tier is much better than Gemini's 20/day, but it is **not unlimited**: for
+> `openai/gpt-oss-120b` it is 30 requests/minute, 1,000 requests/day, **8K tokens/minute**, and
+> **200K tokens/day**. CatGPT's persona prompt makes tokens/minute the real bottleneck — roughly a
+> few questions per minute, not 30. A paid Groq Developer key raises this to about **250K
+> tokens/minute and 1,000 requests/minute** for the same model, at roughly $0.15/$0.60 per million
+> input/output tokens. Groq no longer offers `llama-3.3-70b-versatile` on the free plan; it is
+> listed as Enterprise.
 - For a single evening, actual usage is usually a few dollars at most. Prices change — check your
   provider's current pricing page. This project makes no billing guarantees.
 

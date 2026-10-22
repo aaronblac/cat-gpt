@@ -39,7 +39,7 @@ const PROVIDERS: ProviderDefinition[] = [
     id: "groq",
     apiKeyEnv: "GROQ_API_KEY",
     modelEnv: "GROQ_MODEL",
-    defaultModel: "llama-3.3-70b-versatile",
+    defaultModel: "openai/gpt-oss-120b",
     defaultBaseUrl: "https://api.groq.com/openai/v1",
   },
   {
